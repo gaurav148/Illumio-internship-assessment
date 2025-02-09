@@ -1,15 +1,9 @@
 import csv
 import collections
 import time
+from protocol_map import PROTOCOL_MAP
 
 class LogParser:
-    # Maps protocol numbers to protocol names
-    PROTOCOL_MAP = {
-        '6': 'tcp',
-        '17': 'udp',
-        '1': 'icmp'
-    }
-
     def __init__(self, log_file, tag_map):
         # Initialize with the flow log file path and the lookup tag map
         self.log_file = log_file
@@ -27,7 +21,7 @@ class LogParser:
                         continue
 
                     dst_port = parts[6]
-                    protocol = self.PROTOCOL_MAP.get(parts[7], parts[7]).lower()  # Map protocol number to protocol name
+                    protocol = PROTOCOL_MAP.get(parts[7], parts[7]).lower()  # Map protocol number to protocol name
 
                     if not dst_port.isdigit():
                             raise ValueError(f"Invalid port number '{dst_port}' at line {line_number}")
@@ -37,8 +31,7 @@ class LogParser:
                     tag = self.tag_map.get(key, "Untagged")  # Get the corresponding tag from the lookup table, default to "Untagged" if not found
 
                     self.tag_counts[tag] += 1  # Increment the tag count
-                    if key in self.tag_map:
-                        self.port_protocol_counts[key] += 1  # Increment the count for the matched port/protocol combination
+                    self.port_protocol_counts[key] += 1  # Increment the count for the matched port/protocol combination
         
         except FileNotFoundError:
             raise FileNotFoundError(f"Flow log file not found: {self.log_file}")
@@ -113,7 +106,7 @@ def main(flow_log_file, lookup_file, output_file):
 if __name__ == "__main__":
     flow_log_file = "flow_logs.txt"
     lookup_file = "lookup_table.csv"
-    output_file = "output_results.txt"  # Output file for the results
+    output_file = "output_results.txt"
 
     # Calculating the execution time of the entire operation
     start_time = time.time()

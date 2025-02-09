@@ -55,7 +55,7 @@ class TestFlowLogProcessor(unittest.TestCase):
 
         self.assertEqual(port_protocol_counts[('25', 'tcp')], 1)
         self.assertEqual(port_protocol_counts[('443', 'tcp')], 1)
-        self.assertNotIn(('9999', 'tcp'), port_protocol_counts)
+        self.assertEqual(port_protocol_counts[('9999', 'tcp')], 1)
 
     # Test 3: Handling empty flow log file
     def test_empty_flow_log(self):
@@ -85,7 +85,7 @@ class TestFlowLogProcessor(unittest.TestCase):
         tag_counts, port_protocol_counts = parser.process_logs()
 
         self.assertEqual(tag_counts['Untagged'], 3)
-        self.assertEqual(len(port_protocol_counts), 0)
+        self.assertEqual(len(port_protocol_counts), 3)
 
         os.unlink(empty_lookup_file.name)
 
