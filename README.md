@@ -61,6 +61,18 @@ python3 test_main.py
 ```
 ---
 
+## **File Descriptions**
+
+- **`flow_logs.txt`**: Input file containing AWS VPC flow log data (version 2).
+- **`lookup_table.csv`**: Lookup table in CSV format with `dstport`, `protocol`, and `tag` columns.
+- **`main.py`**: Core script that processes the flow logs, maps tags, and generates output.
+- **`output_results.txt`**: Result file with counts of tags and port/protocol combinations.
+- **`protocol_map.py`**: Defines the mapping of protocol numbers to protocol names.
+- **`README.md`**: Documentation providing problem description, assumptions, and instructions.
+- **`test_main.py`**: Contains unit tests to ensure the functionality of the main script.
+
+---
+
 ## Assumptions
 
 ### **Log Version:**
@@ -94,6 +106,7 @@ python3 test_main.py
 - **Input Files:**  
     - Files like `flow_logs.txt` and `lookup_table.csv` are assumed to be in **plain ASCII text**.
 - **Output Format:**  
+    - Both the required outputs are generated in the same file.
     - **Port/Protocol Combination Counts** include **all combinations** from the flow logs, not just those present in the lookup table.
 
 ### **Error Handling Assumptions:**
@@ -132,3 +145,29 @@ python3 test_main.py
 
 6. Write the final combined results to the output file.
 ```
+
+## ⏱️ Time Analysis
+
+### **Time Complexity**
+
+- **Let:**  
+  - **`M`** = Number of rows in the **lookup table**  
+  - **`N`** = Number of rows in the **flow logs**
+
+- **Breakdown:**  
+  1. **Loading the Lookup Table:** `O(M)`  
+     - Each row is read once and stored in a dictionary for quick access.
+  
+  2. **Processing Flow Logs:** `O(N)`  
+     - Each log entry is processed exactly once, with constant-time operations like splitting, dictionary lookups, and counting.
+
+- ✅ **Total Time Complexity:**  
+\[
+O(M + N)
+\]
+
+### ⏱️ **Execution Time Measurement**
+
+- The code also **prints the total time taken** to execute, measured in **milliseconds (ms)**, to help analyze performance for different input sizes.
+
+---
