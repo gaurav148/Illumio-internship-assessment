@@ -146,7 +146,7 @@ python3 test_main.py
 6. Write the final combined results to the output file.
 ```
 
-## ⏱️ Time Analysis
+## Time Analysis
 
 ### **Time Complexity**
 
@@ -161,12 +161,12 @@ python3 test_main.py
   2. **Processing Flow Logs:** `O(N)`  
      - Each log entry is processed exactly once, with constant-time operations like splitting, dictionary lookups, and counting.
 
-- ✅ **Total Time Complexity:**  
+- **Total Time Complexity:**  
 \[
 O(M + N)
 \]
 
-### ⏱️ **Execution Time Measurement**
+### **Execution Time Measurement**
 
 - The code also **prints the total time taken** to execute, measured in **milliseconds (ms)**, to help analyze performance for different input sizes.
 
