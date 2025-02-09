@@ -17,22 +17,22 @@ Write a program that can parse a file containing **flow log data** and map each 
 The program generates an output file containing the following:
 
 1. **Count of Matches for Each Tag:**  
-    Example:
-    Tag Counts: 
-    Tag,Count 
-    email,5 
-    secure,3 
-    management,2 
-    Untagged,4
+    Example:<br />
+    Tag Counts: <br />
+    Tag,Count <br />
+    email,5 <br />
+    secure,3 <br />
+    management,2 <br />
+    Untagged,4<br />
 
 2. **Count of Matches for Each Port/Protocol Combination:**  
-    Example:
-    Port/Protocol Combination Counts: 
-    Port,Protocol,Count 
-    25,tcp,5 
-    443,tcp,3 
-    50,esp,2 
-    8080,tcp,4
+    Example:<br />
+    Port/Protocol Combination Counts: <br />
+    Port,Protocol,Count <br />
+    25,tcp,5 <br />
+    443,tcp,3 <br />
+    50,esp,2 <br />
+    8080,tcp,4<br />
 
 
 ---
@@ -42,8 +42,8 @@ The program generates an output file containing the following:
 ### **Step 1: Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/gaurav148/Illumio-internship-assessment.git
+cd Illumio-internship-assessment
 ```
 
 ### **Step 2: Prepare Input Files**
@@ -110,7 +110,7 @@ python3 test_main.py
 
 ### Multithreading for Large files:
 - If the flow log files or the lookup table grow significantly large, processing time will increase.
-- Implement multithreading to divide the workload across multiple CPU cores.
+- Implementing multithreading to divide the workload across multiple CPU cores would be a better approach.
 - **Pseudocode:**
 
 ```bash
