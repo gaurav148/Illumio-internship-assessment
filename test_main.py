@@ -91,6 +91,7 @@ class TestFlowLogProcessor(unittest.TestCase):
 
     # Test 5: Invalid log lines (malformed data)
     def test_invalid_log_lines(self):
+        # Taking input of 3 rows, 1 valid and 2 invalid
         invalid_log_content = """2 123 eni-abc 10.0.0.1 192.0.2.1 12345 25 6 ACCEPT OK
 2 123 eni-def 10.0.0.2 192.0.2.2 12346 443 6 20 8000 1620140761 1620140821 ACCEPT OK
 invalid line without proper format
@@ -106,7 +107,7 @@ invalid line without proper format
         parser = LogParser(invalid_log_file.name, tag_map)
         tag_counts, port_protocol_counts = parser.process_logs()
 
-        self.assertEqual(tag_counts['secure'], 1)
+        self.assertEqual(tag_counts['secure'], 1) # The 1 valid row is tagged properly
         self.assertEqual(tag_counts['Untagged'], 0)  # Only valid lines are processed
 
         os.unlink(invalid_log_file.name)
@@ -129,7 +130,54 @@ invalid line without proper format
 
         os.unlink(duplicate_lookup_file.name)
 
-    # Test 7: Output file generation
+    # Test 7: Lookup file not found
+    def test_missing_lookup_file(self):
+        error_message = ""
+        try:
+            lookup = LookupTable("nonexistent_lookup.csv")
+            lookup.load_lookup()
+        except FileNotFoundError as e:
+            error_message = str(e)
+
+        self.assertEqual(error_message, "Lookup file not found: nonexistent_lookup.csv")
+    
+    # Test 8: Flow log file not found
+    def test_missing_flow_log_file(self):
+        lookup = LookupTable(self.lookup_file.name)
+        tag_map = lookup.load_lookup()
+
+        error_message = ""
+        try:
+            parser = LogParser("nonexistent_flow_logs.txt", tag_map)
+            parser.process_logs()
+        except FileNotFoundError as e:
+            error_message = str(e)
+
+        self.assertEqual(error_message, "Flow log file not found: nonexistent_flow_logs.txt")
+
+    # Test 9: Invalid port number in the flow logs
+    def test_invalid_port_in_flow_log(self):
+        invalid_log_content = """2 123 eni-abc 10.0.0.1 192.0.2.1 12345 abc 6 10 5000 1620140761 1620140821 ACCEPT OK"""
+
+        invalid_log_file = tempfile.NamedTemporaryFile(delete=False, mode='w+')
+        invalid_log_file.write(invalid_log_content)
+        invalid_log_file.close()
+
+        lookup = LookupTable(self.lookup_file.name)
+        tag_map = lookup.load_lookup()
+
+        error_message = ""
+        try:
+            parser = LogParser(invalid_log_file.name, tag_map)
+            parser.process_logs()
+        except ValueError as e:
+            error_message = str(e)
+
+        self.assertEqual(error_message, "Invalid port number 'abc' at line 1")
+
+        os.unlink(invalid_log_file.name)
+
+    # Test 10: Output file generation
     def test_output_writer(self):
         lookup = LookupTable(self.lookup_file.name)
         tag_map = lookup.load_lookup()
